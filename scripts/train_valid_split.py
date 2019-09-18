@@ -5,9 +5,9 @@ import random
 
 # Works when all the patches are in the train folder and some need to be moved to valid
 data_path = '/project/DSone/as3ek/data/patches/1000/gannorm_seem_cinn/'
-train_perct = 50
-source = 'valid/Normal/'
-target = 'train/Normal/'
+train_perct = 90
+source = 'train/Normal/'
+target = 'valid/Normal/'
 
 patch_list = os.listdir(data_path + source)
 unq_biopsy = np.unique([x.split('__')[0] for x in patch_list])
