@@ -95,8 +95,6 @@ def keep_tile(tile_tuple, tile_size, tissue_threshold):
 
 
 # %%
-
-
 def get_img_paths_vsi(train_paths):
     images = {}
     files = glob.glob(os.path.join(train_paths, '*.vsi'))
@@ -108,12 +106,6 @@ def get_img_paths_vsi(train_paths):
 
 
 # %%
-
-
-transform = transforms.Compose([
-    transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
-])
-
 files = list(get_img_paths_vsi(PATH).values())
 num_files = len(files)
 
@@ -121,7 +113,7 @@ for i, file in enumerate(files):
     image = bioformats.ImageReader(file)
     rescale = resize_to / patch_size
     height, width, c = np.array(image.read(rescale=False)).shape
-    new_dims = int(rescale * (width // resize_to) * resize_to) ,     int(rescale * (height // resize_to) * resize_to)
+    new_dims = int(rescale * (width // resize_to) * resize_to), int(rescale * (height // resize_to) * resize_to)
     
     file = file.split('/')[-1]
     
