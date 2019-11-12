@@ -61,11 +61,11 @@ def keep_tile(tile_tuple, tile_size, tissue_threshold):
 # -
 
 # Parameters
-PATH = '/project/DSone/le7jg/cincinnati_celiac_normal_new/Celiac/'
+PATH = '/project/DSone/le7jg/cincinnati_celiac_normal_new/Normal/'
 patch_size = 1000
 resize_to = 1000
 target = '/project/DSone/as3ek/data/WSI_patched/cinn_celiac_zif/' # for WSI
-target_path_unnorm = '/project/DSone/as3ek/data/patches/1000/un_normalized/celiac_normal/celiac/' # for unnormalized patches
+target_path_unnorm = '/project/DSone/as3ek/data/patches/1000/un_normalized/celiac_normal/normal/' # for unnormalized patches
 thresh = 0.30
 save_WSI = False
 overlap = 0.5 # %-age area
@@ -84,14 +84,13 @@ def get_img_paths_vsi(train_paths):
 javabridge.start_vm(class_path=bioformats.JARS)
 
 # +
-files = list(get_img_paths_vsi(PATH).values())[6:]
+files = list(get_img_paths_vsi(PATH).values())[2:]
 num_files = len(files)
 
-for i, file in enumerate(files):
-    
+for i, file in tqdm.tqdm(enumerate(files)):
     image = bioformats.ImageReader(file)
     rescale = resize_to / patch_size
-    height, width, c = np.array(image.read(rescale=False)).shape
+    height, width = image.rdr.getSizeY(), image.rdr.getSizeX() 
     new_dims = int(rescale * (width // resize_to) * resize_to), int(rescale * (height // resize_to) * resize_to)
     
     file = file.split('/')[-1]
@@ -135,7 +134,6 @@ for i, file in enumerate(files):
         x_cord = int(x_cord + (1 - overlap) * patch_size)
         y_cord = 0
     
-    print(str(i + 1) + '/' + str(num_files) + ' Complete!')
     if save_WSI:
         if not os.path.exists(target):
             os.makedirs(target)
