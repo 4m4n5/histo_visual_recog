@@ -84,14 +84,14 @@ def get_img_paths_vsi(train_paths):
 javabridge.start_vm(class_path=bioformats.JARS)
 
 # +
-files = list(get_img_paths_vsi(PATH).values())[6:]
+files = list(get_img_paths_vsi(PATH).values())[13:]
 num_files = len(files)
 
 for i, file in enumerate(files):
     
     image = bioformats.ImageReader(file)
     rescale = resize_to / patch_size
-    height, width, c = np.array(image.read(rescale=False)).shape
+    height, width = image.rdr.getSizeY(), image.rdr.getSizeX()
     new_dims = int(rescale * (width // resize_to) * resize_to), int(rescale * (height // resize_to) * resize_to)
     
     file = file.split('/')[-1]

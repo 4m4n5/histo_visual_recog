@@ -51,10 +51,10 @@ def keep_tile(tile_tuple, tile_size, tissue_threshold):
 # -
 
 # Parameters
-PATH = '/project/DSone/as3ek/data/WSI/cinn_celiac_zif/'
+PATH = '/project/DSone/biopsy_images/duodenum/cincinnati_celiac_normal/Cincinnati-Celiac-Cropped/'
 patch_size = 1000
 resize_to = 1000
-target = '/project/DSone/as3ek/data/WSI_patched/cinn_celiac_zif/' # for WSI
+target = '/project/DSone/as3ek/data/patches/1000/un_normalized/' # for WSI
 target_path_unnorm = '/project/DSone/as3ek/data/patches/1000/un_normalized/cinn_celiac_zif/' # for unnormalized patches
 thresh = 0.40
 save_WSI = False
@@ -66,7 +66,7 @@ num_files = len(os.listdir(PATH))
 for i, file in enumerate(list(reversed(os.listdir(PATH)))):
     image = opsl.OpenSlide(PATH + file)
     rescale = resize_to / patch_size
-    new_dims = int(rescale * (image.dimensions[0] // 256) * 256) , int(rescale * (image.dimensions[1] // 256) * 256)
+    new_dims = int(rescale * (image.dimensions[0] // resize_to) * resize_to) , int(rescale * (image.dimensions[1] // resize_to) * resize_to)
     
     # Initialize x and y coord
     x_cord = 0
@@ -75,8 +75,8 @@ for i, file in enumerate(list(reversed(os.listdir(PATH)))):
     if save_WSI:
         joined_image = Image.new('RGB', (new_dims))
     
-    while x_cord + patch_size < image.dimensions[0] - 1000:
-        while y_cord + patch_size < image.dimensions[1] - 1000:
+    while x_cord + patch_size < image.dimensions[0]:
+        while y_cord + patch_size < image.dimensions[1]:
             patch = image.read_region((x_cord, y_cord), 0, (patch_size, patch_size))
         
             patch = patch.convert('RGB')
@@ -111,7 +111,7 @@ for i, file in enumerate(list(reversed(os.listdir(PATH)))):
     if save_WSI:
         if not os.path.exists(target):
             os.makedirs(target)
-        joined_image.save(target + file.split('.')[0] + '.png')
+        joined_image.save(target + file.split('.')[0] + '.jpg')
 # -
 
 
