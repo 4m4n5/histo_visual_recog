@@ -8,8 +8,8 @@ from tqdm import tqdm
 # Works when all the patches are in the train folder and some need to be moved to valid
 data_path = '/project/DSone/as3ek/data/patches/1000/classification/cinn_celiac__normal/'
 train_perct = 90
-source = 'train/normal/'
-target = 'valid/normal/'
+source = 'train/celiac/'
+target = 'valid/celiac/'
 
 if not os.path.exists(data_path + target):
     os.mkdir(data_path + target)
@@ -17,10 +17,10 @@ if not os.path.exists(data_path + target):
 
 patch_list = os.listdir(data_path + source)
 unq_biopsy = np.unique([x.split('__')[0] for x in patch_list])
-
-len(np.unique([x.split('_')[0] for x in unq_biopsy]))
-
-np.unique([x.split('_')[0] for x in unq_biopsy])
+print('All Data')
+print(len(patch_list))
+print(len(np.unique([x.split('_')[0] for x in unq_biopsy])))
+print(np.unique([x.split('_')[0] for x in unq_biopsy]))
 
 patch_target_map = {}
 for i, patch in tqdm(enumerate(patch_list)):
@@ -34,3 +34,19 @@ for i, patch in tqdm(enumerate(patch_list)):
         shutil.move(data_path + source + patch, data_path + target)
     else:
         continue
+
+patch_list = os.listdir(data_path + source)
+unq_biopsy = np.unique([x.split('__')[0] for x in patch_list])
+print('Train')
+print(len(patch_list))
+print(len(np.unique([x.split('_')[0] for x in unq_biopsy])))
+print(np.unique([x.split('_')[0] for x in unq_biopsy]))
+
+patch_list = os.listdir(data_path + target)
+unq_biopsy = np.unique([x.split('__')[0] for x in patch_list])
+print('Valid')
+print(len(patch_list))
+print(len(np.unique([x.split('_')[0] for x in unq_biopsy])))
+print(np.unique([x.split('_')[0] for x in unq_biopsy]))
+
+
